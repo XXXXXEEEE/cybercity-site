@@ -5,11 +5,11 @@ export const PLAYBACK_RATE=1;
 export const RESPONSE_DELAY=.1;
 export const MINTS=[
  {at:0,key:'network',name:'Road Grid',effect:'The first district is connected',duration:1.2},
- {at:.5,key:'energy',name:'Energy Bus',effect:'Power reaches the district',duration:1.4},
- {at:.9,key:'district',name:'Smart Block',effect:'The neighborhood grows',duration:2.7},
- {at:1.8,key:'towers',name:'Tower Core',effect:'The skyline rises',duration:3},
- {at:3.1,key:'transit',name:'Sky Transit',effect:'Connections cross the city',duration:1.7},
- {at:3.8,key:'light',name:'Adaptive Lighting',effect:'Windows come alive',duration:2.6},
+ {at:.35,key:'energy',name:'Energy Bus',effect:'Power reaches the district',duration:1.4},
+ {at:.6,key:'district',name:'Smart Block',effect:'The neighborhood grows',duration:3},
+ {at:1.1,key:'towers',name:'Tower Core',effect:'The skyline rises',duration:3.6},
+ {at:2.8,key:'transit',name:'Sky Transit',effect:'Connections cross the city',duration:1.9},
+ {at:3.5,key:'light',name:'Adaptive Lighting',effect:'Windows come alive',duration:3},
  {at:6,key:'complete',name:'City Link',effect:'A city, working together',duration:1.9}
 ];
 export const PHASES=[

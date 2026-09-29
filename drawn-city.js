@@ -1,6 +1,6 @@
 // One registered photograph grows from a populated district into its skyline.
 // The static opening poster is rendered from this exact component at time zero.
-import { MINTS, RESPONSE_DELAY } from './build-timeline.js?v=continuous-12';
+import { MINTS, RESPONSE_DELAY } from './build-timeline.js?v=skyline-13';
 const W=1672,H=941;
 const clamp=v=>Math.max(0,Math.min(1,v));
 const smooth=v=>{const p=clamp(v);return p*p*(3-2*p);};
@@ -18,15 +18,22 @@ export class DrawnCity {
  constructor(canvas,city){
   this.canvas=canvas;this.ctx=canvas.getContext('2d',{alpha:true});
   if(!this.ctx)throw new Error('Canvas is unavailable');
-  this.city=city;this.draft=surface();this.mask=surface();this.layer=surface();
+  this.city=city;this.draft=surface();this.mask=surface();this.layer=surface();this.foreground=surface();this.streetMask=surface();
   const draft=this.draft.getContext('2d');
-  draft.filter='grayscale(.45) brightness(.85)';draft.drawImage(city,0,0,W,H);
+  draft.filter='grayscale(.7) brightness(.58)';draft.drawImage(city,0,0,W,H);
+  // The inhabited foreground stays lit while the skyline above it is built.
+  const street=this.streetMask.getContext('2d');
+  const streetMask=street.createLinearGradient(0,H*.59,0,H*.72);
+  streetMask.addColorStop(0,'transparent');streetMask.addColorStop(1,'#fff');
+  street.fillStyle=streetMask;street.fillRect(0,0,W,H);
+  const foreground=this.foreground.getContext('2d');
+  foreground.drawImage(city,0,0,W,H);foreground.globalCompositeOperation='destination-in';foreground.drawImage(this.streetMask,0,0);
   this.blocks=skyline.map(([a,b,roof],i)=>{
    const center=(a+b)/2,isTower=center>=.35&&center<=.65;
    const mint=MINTS.find(event=>event.key===(isTower?'towers':'district'));
-   const stagger=(i%4)*.065;
+   const stagger=(i%4)*.11;
    return {x:Math.floor(a*W),w:Math.ceil(b*W)-Math.floor(a*W),roof:Math.max(0,roof*H-8),bottom:H*.86,
-    start:mint.at+RESPONSE_DELAY+stagger,span:mint.duration-stagger,seed:isTower?.55:.68+(i%3)*.025};
+    start:mint.at+RESPONSE_DELAY+stagger,span:mint.duration-stagger,seed:isTower?.12:.40+(i%3)*.035};
   });
  }
  resize(width,height){
@@ -42,17 +49,20 @@ export class DrawnCity {
    const progress=frame.reduced?1:smooth((frame.elapsed-b.start)/b.span);
    const built=b.seed+(1-b.seed)*progress;
    const top=(b.bottom-(b.bottom-b.roof)*built)*(1-progress**4);
-   const feather=70*(1-progress);
+   const feather=32*(1-progress);
    // A continuous alpha ramp follows each building, without discrete scan bands.
    if(feather>.01){const fade=mask.createLinearGradient(0,top,0,top+feather);fade.addColorStop(0,'transparent');fade.addColorStop(1,'#fff');mask.fillStyle=fade;}
    else mask.fillStyle='#fff';
    mask.fillRect(b.x,top,b.w,H-top);
   }
   const layer=this.layer.getContext('2d');layer.clearRect(0,0,W,H);
-  const light=.55+.45*smooth(frame.scene.light);
+  const light=.3+.7*smooth(frame.scene.light);
   layer.globalCompositeOperation='source-over';layer.globalAlpha=1-light;layer.drawImage(this.draft,0,0);
   layer.globalCompositeOperation='lighter';layer.globalAlpha=light;layer.drawImage(this.city,0,0,W,H);
   layer.globalAlpha=1;layer.globalCompositeOperation='destination-in';layer.drawImage(this.mask,0,0);
+  // Weighted replacement preserves the photograph's alpha at the final frame.
+  layer.globalCompositeOperation='destination-out';layer.drawImage(this.streetMask,0,0);
+  layer.globalCompositeOperation='lighter';layer.drawImage(this.foreground,0,0);
   layer.globalCompositeOperation='source-over';
  }
  traffic(frame){
