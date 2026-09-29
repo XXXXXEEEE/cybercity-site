@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="hero-animation.css">
   <link rel="stylesheet" href="city-theme.css?v=20260929">
   <link rel="stylesheet" href="city-shell.css?v=cinematic-22">
-  <link rel="stylesheet" href="city-sections.css?v=mint-9">
+  <link rel="stylesheet" href="city-sections.css?v=select-23">
   <script src="app.js?v=mint-9" defer></script>
   <script type="module" src="city-film.js?v=cinematic-22"></script>
 </head>
@@ -94,8 +94,8 @@
         <div class="demo-heading"><span class="mono">CC-001 / Access Key</span></div>
         <h3>The city’s first door</h3>
         <div class="demo-fields">
-          <label>Your access level<select id="permission-level"><option value="0">0 · Visitor</option><option value="1">1 · Resident</option><option value="2">2 · Builder</option><option value="3" selected>3 · Administrator</option></select></label>
-          <label>Required access level<select id="permission-required"><option value="0">0 · Visitor or higher</option><option value="1">1 · Resident or higher</option><option value="2" selected>2 · Builder or higher</option><option value="3">3 · Administrator</option></select></label>
+          <label>Your access level<span class="select-control"><select id="permission-level"><option value="0">0 · Visitor</option><option value="1">1 · Resident</option><option value="2">2 · Builder</option><option value="3" selected>3 · Administrator</option></select></span></label>
+          <label>Required access level<span class="select-control"><select id="permission-required"><option value="0">0 · Visitor or higher</option><option value="1">1 · Resident or higher</option><option value="2" selected>2 · Builder or higher</option><option value="3">3 · Administrator</option></select></span></label>
         </div>
         <label class="auth-control"><span>Identity verified</span><input id="permission-auth" type="checkbox" checked><span class="switch-visual" aria-hidden="true"></span></label>
         <div class="permission-result" id="permission-result" aria-live="polite"><div class="result-bit mono" id="permission-bit">1</div><div><strong id="permission-title">Access granted</strong><p id="permission-reason">Your identity is verified and your access level meets the requirement.</p></div></div>
