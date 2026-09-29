@@ -1,6 +1,6 @@
-import { DrawnCity } from './drawn-city.js?v=skyline-13';
-import { buildFrame, PLAYBACK_RATE } from './build-timeline.js?v=skyline-13';
-import { CityTerminal } from './city-terminal.js?v=skyline-13';
+import { DrawnCity } from './drawn-city.js?v=quick-flow-16';
+import { buildFrame, PLAYBACK_RATE, REALITY_START, DURATION } from './build-timeline.js?v=quick-flow-16';
+import { CityTerminal } from './city-terminal.js?v=quick-flow-16';
 
 const root = document.getElementById('hero-city');
 const canvas = document.getElementById('hero-city-canvas');
@@ -15,10 +15,13 @@ function paint() {
   if(scene)scene.render(state);
   terminal.update(state);
   const p=state.progress;
+  const reality=Math.max(0,Math.min(1,(state.elapsed-REALITY_START)/(DURATION-REALITY_START)));
+  root.style.setProperty('--city-saturation',String(1.15-.43*reality));
   root.dataset.progress = String(Math.round(p*100));
   root.dataset.phase = state.phase.key;
   root.dataset.elapsed = elapsed.toFixed(2);
   root.dataset.mint = state.mint?.key||'boot';
+  root.dataset.stage = state.stage;
 }
 function resize() {
   if(!scene) return;
@@ -67,9 +70,10 @@ async function prepare() {
   try {
     const plate = root.querySelector('.film-poster');
     const city = new Image(); city.src = new URL('./assets/cyberpunk-city-cutout.webp',import.meta.url).href;
-    await Promise.all([decodeImage(city),decodeImage(plate)]);
-    scene = new DrawnCity(canvas,city);
-    root.dataset.animation = 'mint-driven-growth';
+    const blueprint = new Image(); blueprint.src = new URL('./assets/cybercity-blueprint.webp',import.meta.url).href;
+    await Promise.all([decodeImage(city),decodeImage(blueprint),decodeImage(plate)]);
+    scene = new DrawnCity(canvas,city,blueprint);
+    root.dataset.animation = 'draw-blueprint-then-city';
     resize(); root.classList.add('film-ready'); synchronize();
   } catch(error) {
     // Keep the complete photographic poster if canvas or image decoding fails.

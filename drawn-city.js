@@ -1,6 +1,5 @@
-// One registered photograph grows from a populated district into its skyline.
-// The static opening poster is rendered from this exact component at time zero.
-import { MINTS, RESPONSE_DELAY } from './build-timeline.js?v=skyline-13';
+// First draw the entire blue city; only then materialize its photograph.
+import { MINTS, RESPONSE_DELAY, BLUEPRINT_END, REALITY_START } from './build-timeline.js?v=quick-flow-16';
 const W=1672,H=941;
 const clamp=v=>Math.max(0,Math.min(1,v));
 const smooth=v=>{const p=clamp(v);return p*p*(3-2*p);};
@@ -15,25 +14,24 @@ const skyline=[
  [.85,.866,.36],[.866,.912,.222],[.912,.94,.35],[.94,.977,.337],[.977,1,.37]
 ];
 export class DrawnCity {
- constructor(canvas,city){
+ constructor(canvas,city,blueprint){
   this.canvas=canvas;this.ctx=canvas.getContext('2d',{alpha:true});
-  if(!this.ctx)throw new Error('Canvas is unavailable');
-  this.city=city;this.draft=surface();this.mask=surface();this.layer=surface();this.foreground=surface();this.streetMask=surface();
-  const draft=this.draft.getContext('2d');
-  draft.filter='grayscale(.7) brightness(.58)';draft.drawImage(city,0,0,W,H);
-  // The inhabited foreground stays lit while the skyline above it is built.
-  const street=this.streetMask.getContext('2d');
-  const streetMask=street.createLinearGradient(0,H*.59,0,H*.72);
-  streetMask.addColorStop(0,'transparent');streetMask.addColorStop(1,'#fff');
-  street.fillStyle=streetMask;street.fillRect(0,0,W,H);
-  const foreground=this.foreground.getContext('2d');
-  foreground.drawImage(city,0,0,W,H);foreground.globalCompositeOperation='destination-in';foreground.drawImage(this.streetMask,0,0);
+  if(!this.ctx||!blueprint)throw new Error('City drawing is unavailable');
+  this.city=city;this.blueprint=blueprint;
+  this.unlit=surface();this.mask=surface();this.material=surface();this.layer=surface();
+  this.ghost=surface();this.drawMask=surface();this.drawing=surface();
+  const ghost=this.ghost.getContext('2d');
+  ghost.filter='blur(1.7px) brightness(.3)';ghost.drawImage(blueprint,0,0,W,H);
+  const unlit=this.unlit.getContext('2d');
+  unlit.filter='saturate(.7) brightness(.68)';unlit.drawImage(city,0,0,W,H);
   this.blocks=skyline.map(([a,b,roof],i)=>{
    const center=(a+b)/2,isTower=center>=.35&&center<=.65;
    const mint=MINTS.find(event=>event.key===(isTower?'towers':'district'));
-   const stagger=(i%4)*.11;
-   return {x:Math.floor(a*W),w:Math.ceil(b*W)-Math.floor(a*W),roof:Math.max(0,roof*H-8),bottom:H*.86,
-    start:mint.at+RESPONSE_DELAY+stagger,span:mint.duration-stagger,seed:isTower?.12:.40+(i%3)*.035};
+   const stagger=(i%4)*.04,x=Math.floor(a*W);
+   return {x,w:Math.floor(b*W)-x,roof:Math.max(0,roof*H-8),
+    start:mint.at+RESPONSE_DELAY+stagger,span:mint.duration-stagger,
+    realStart:REALITY_START+RESPONSE_DELAY+Math.abs(center-.58)*.42+(isTower?.14:0),
+    realSpan:isTower?1.6:1.35};
   });
  }
  resize(width,height){
@@ -42,36 +40,95 @@ export class DrawnCity {
   this.canvas.width=Math.round(width*this.ratio);this.canvas.height=Math.round(height*this.ratio);
   this.ctx.imageSmoothingEnabled=true;this.ctx.imageSmoothingQuality='high';
  }
- compose(frame){
-  const mask=this.mask.getContext('2d');mask.clearRect(0,0,W,H);mask.fillStyle='#fff';
-  mask.fillRect(0,H*.86,W,H*.14);
+ composeBlueprint(frame){
+  const drawing=this.drawing.getContext('2d');drawing.clearRect(0,0,W,H);
+  drawing.globalCompositeOperation='source-over';
+  if(frame.elapsed>=BLUEPRINT_END){drawing.drawImage(this.blueprint,0,0,W,H);return;}
+  const mask=this.drawMask.getContext('2d');mask.clearRect(0,0,W,H);
+  const roads=smooth(frame.scene.network),energy=smooth(frame.scene.energy);
+  // Trace the ground plane first; each building has its own rising drawing front.
+  const ground=mask.createLinearGradient(0,H*.76,0,H*.91);
+  ground.addColorStop(0,'transparent');ground.addColorStop(1,`rgba(255,255,255,${roads})`);
+  mask.fillStyle=ground;mask.fillRect(0,H*.76,W*(.16+.84*energy),H*.24);
+  const fronts=[];
   for(const b of this.blocks){
-   const progress=frame.reduced?1:smooth((frame.elapsed-b.start)/b.span);
-   const built=b.seed+(1-b.seed)*progress;
-   const top=(b.bottom-(b.bottom-b.roof)*built)*(1-progress**4);
-   const feather=32*(1-progress);
-   // A continuous alpha ramp follows each building, without discrete scan bands.
-   if(feather>.01){const fade=mask.createLinearGradient(0,top,0,top+feather);fade.addColorStop(0,'transparent');fade.addColorStop(1,'#fff');mask.fillStyle=fade;}
-   else mask.fillStyle='#fff';
+   const progress=smooth((frame.elapsed-b.start)/b.span);
+   if(progress===0)continue;
+   const top=(H-(H-b.roof)*progress)*(1-progress**4),feather=18*(1-progress)+1;
+   const fade=mask.createLinearGradient(0,top,0,top+feather);
+   fade.addColorStop(0,'transparent');fade.addColorStop(1,'white');
+   mask.fillStyle=fade;mask.fillRect(b.x,top,b.w,H-top);
+   if(progress<.98)fronts.push({x:b.x,y:top+feather*.65,w:b.w,h:7});
+  }
+  // Cover residual sky-edge details continuously, without a pop at the blue hold.
+  const finish=smooth((frame.elapsed-(BLUEPRINT_END-.22))/.22);
+  if(finish>0){mask.fillStyle=`rgba(255,255,255,${finish})`;mask.fillRect(0,0,W,H);}
+  drawing.drawImage(this.blueprint,0,0,W,H);
+  drawing.globalCompositeOperation='destination-in';drawing.drawImage(this.drawMask,0,0);
+  const ghost=this.material.getContext('2d');ghost.clearRect(0,0,W,H);
+  ghost.globalCompositeOperation='source-over';ghost.drawImage(this.ghost,0,0);
+  ghost.globalCompositeOperation='destination-out';ghost.drawImage(this.drawMask,0,0);
+  ghost.globalCompositeOperation='source-over';
+  drawing.globalCompositeOperation='lighter';drawing.drawImage(this.material,0,0);
+  // The advancing highlight is clipped to the real architectural texture.
+  // No arbitrary neon skyline is drawn over the city.
+  if(fronts.length){
+   drawing.save();drawing.beginPath();
+   for(const front of fronts)drawing.rect(front.x,front.y,front.w,front.h);
+   drawing.clip();drawing.globalAlpha=.65*(1-finish);
+   drawing.drawImage(this.blueprint,0,0,W,H);drawing.restore();
+  }
+  drawing.globalCompositeOperation='source-over';
+ }
+ compose(frame){
+  this.composeBlueprint(frame);
+  const layer=this.layer.getContext('2d');layer.clearRect(0,0,W,H);
+  layer.globalCompositeOperation='source-over';
+  // Nothing photographic can appear until the entire blue drawing is finished.
+  if(frame.elapsed<=REALITY_START){layer.drawImage(this.drawing,0,0);return;}
+  const mask=this.mask.getContext('2d');mask.clearRect(0,0,W,H);
+  const completion=smooth(frame.scene.complete),solid=.84+.16*completion;
+  const realTime=frame.elapsed-REALITY_START;
+  const roads=smooth(realTime/.65),energy=smooth(realTime/.9);
+  const ground=mask.createLinearGradient(0,H*.72,0,H*.9);
+  ground.addColorStop(0,'transparent');ground.addColorStop(1,`rgba(255,255,255,${roads*(.55+.25*energy)})`);
+  mask.fillStyle=ground;mask.fillRect(0,0,W,H);
+  for(const b of this.blocks){
+   const progress=smooth((frame.elapsed-b.realStart)/b.realSpan);
+   if(progress===0)continue;
+   const top=(H-(H-b.roof)*progress)*(1-progress**4),feather=65*(1-progress)+1;
+   const fade=mask.createLinearGradient(0,top,0,top+feather);
+   fade.addColorStop(0,'transparent');fade.addColorStop(1,`rgba(255,255,255,${solid})`);
+   mask.fillStyle=fade;
    mask.fillRect(b.x,top,b.w,H-top);
   }
-  const layer=this.layer.getContext('2d');layer.clearRect(0,0,W,H);
-  const light=.3+.7*smooth(frame.scene.light);
-  layer.globalCompositeOperation='source-over';layer.globalAlpha=1-light;layer.drawImage(this.draft,0,0);
-  layer.globalCompositeOperation='lighter';layer.globalAlpha=light;layer.drawImage(this.city,0,0,W,H);
-  layer.globalAlpha=1;layer.globalCompositeOperation='destination-in';layer.drawImage(this.mask,0,0);
-  // Weighted replacement preserves the photograph's alpha at the final frame.
-  layer.globalCompositeOperation='destination-out';layer.drawImage(this.streetMask,0,0);
-  layer.globalCompositeOperation='lighter';layer.drawImage(this.foreground,0,0);
+  const transit=smooth((realTime-.3)/.8);
+  if(transit>0){
+   const bridge=mask.createLinearGradient(0,H*.79,0,H*.9);
+   bridge.addColorStop(0,'transparent');bridge.addColorStop(.55,`rgba(255,255,255,${transit*.65})`);bridge.addColorStop(1,'transparent');
+   mask.fillStyle=bridge;mask.fillRect(0,H*.79,W,H*.11);
+  }
+  if(completion>0){mask.fillStyle=`rgba(255,255,255,${completion})`;mask.fillRect(0,0,W,H);}
+  const material=this.material.getContext('2d'),light=smooth(frame.scene.light);
+  material.clearRect(0,0,W,H);material.globalCompositeOperation='source-over';
+  material.globalAlpha=1-light;material.drawImage(this.unlit,0,0);
+  material.globalCompositeOperation='lighter';material.globalAlpha=light;material.drawImage(this.city,0,0,W,H);
+  material.globalAlpha=1;material.globalCompositeOperation='destination-in';material.drawImage(this.mask,0,0);
+  material.globalCompositeOperation='source-over';
+  // Complementary premultiplied-alpha masks retain the silhouette throughout.
+  layer.drawImage(this.drawing,0,0);
+  layer.globalCompositeOperation='destination-out';layer.drawImage(this.mask,0,0);
+  layer.globalCompositeOperation='lighter';layer.drawImage(this.material,0,0);
   layer.globalCompositeOperation='source-over';
  }
  traffic(frame){
-  const time=frame.elapsed,strength=.18+.32*smooth(frame.scene.transit)+.5*smooth(frame.scene.complete);
+  if(frame.elapsed<=REALITY_START)return;
+  const time=frame.elapsed,strength=smooth((time-REALITY_START)/.9)*(.45+.55*smooth(frame.scene.complete));
   const c=this.ctx;c.save();c.globalCompositeOperation='screen';
   for(let i=0;i<10;i++){
    const p=((time*.055+i*.099)%1)**1.5,lane=i%2?.009:-.009;
    const x=W*(.568+p*.022+lane*(.2+p)),y=H*(.576+p*.278);
-   c.strokeStyle=i%2?'rgba(220,136,178,'+strength*.6+')':'rgba(189,230,244,'+strength*.65+')';
+   c.strokeStyle=i%2?'rgba(220,136,178,'+strength*.6+')':'rgba(124,208,255,'+strength*.65+')';
    c.lineWidth=.7+p;c.beginPath();c.moveTo(x,y);c.lineTo(x+.3,y+2+p*5);c.stroke();
   }
   c.restore();
@@ -82,7 +139,7 @@ export class DrawnCity {
   // Match the poster's object-fit:cover and object-position:58% 100% exactly.
   const scale=Math.max(this.width/W,this.height/H);
   c.translate((this.width-W*scale)*.58,this.height-H*scale);c.scale(scale,scale);
-  if(frame.reduced||frame.scene.light>=1)c.drawImage(this.city,0,0,W,H);
+  if(frame.reduced||frame.progress>=1)c.drawImage(this.city,0,0,W,H);
   else{this.compose(frame);c.drawImage(this.layer,0,0);}
   if(!frame.reduced)this.traffic(frame);
   c.globalAlpha=1;
