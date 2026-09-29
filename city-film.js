@@ -22,6 +22,7 @@ function paint() {
   root.dataset.elapsed = elapsed.toFixed(2);
   root.dataset.mint = state.mint?.key||'boot';
   root.dataset.stage = state.stage;
+  hero.dataset.stage = state.stage;
 }
 function resize() {
   if(!scene) return;
