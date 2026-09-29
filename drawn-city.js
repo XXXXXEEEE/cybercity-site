@@ -36,7 +36,7 @@ export class DrawnCity {
  }
  resize(width,height){
   this.width=width;this.height=height;
-  this.ratio=Math.min(devicePixelRatio||1,1.5,Math.sqrt(1500000/(width*height)));
+  this.ratio=Math.min(devicePixelRatio||1,2,Math.sqrt(3000000/(width*height)));
   this.canvas.width=Math.round(width*this.ratio);this.canvas.height=Math.round(height*this.ratio);
   this.ctx.imageSmoothingEnabled=true;this.ctx.imageSmoothingQuality='high';
  }

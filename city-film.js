@@ -70,7 +70,7 @@ async function prepare() {
   try {
     const plate = root.querySelector('.film-poster');
     const city = new Image(); city.src = new URL('./assets/cyberpunk-city-cutout.webp',import.meta.url).href;
-    const blueprint = new Image(); blueprint.src = new URL('./assets/cybercity-blueprint.webp',import.meta.url).href;
+    const blueprint = new Image(); blueprint.src = new URL('./assets/cybercity-blueprint.webp?v=crisp-17',import.meta.url).href;
     await Promise.all([decodeImage(city),decodeImage(blueprint),decodeImage(plate)]);
     scene = new DrawnCity(canvas,city,blueprint);
     root.dataset.animation = 'draw-blueprint-then-city';
