@@ -13,10 +13,9 @@
 .city-terminal{position:absolute;left:8%;top:auto;bottom:31%;width:26%;max-width:340px;height:140px;z-index:2;border:0;background:none;pointer-events:none}
 .city-terminal::before{content:'';position:absolute;z-index:-1;left:-5vw;top:-64px;width:calc(100% + 16vw);height:calc(100% + 128px);background:radial-gradient(ellipse 70% 68% at 32% 53%,#29465b38,transparent 72%);mix-blend-mode:screen}
 .terminal-output{height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:12px;overflow:visible;font:400 .8125rem/1.5 var(--mono);letter-spacing:0;contain:layout}
-.mint-item{position:relative;opacity:.43;flex-shrink:0;padding-left:14px;border-left:1px solid #7fc3d866;transition:opacity .3s;text-shadow:0 1px 10px #020a10}
+.mint-item{position:relative;opacity:.43;flex-shrink:0;transition:opacity .3s;text-shadow:0 1px 10px #020a10}
 .mint-item:nth-last-child(2){opacity:.65}
-.mint-item.current{opacity:1;border-left-color:#a3e7f2;animation:mint-arrive .35s cubic-bezier(.2,.65,.3,1) both}
-.mint-item.current::after{content:'';position:absolute;left:calc(100% + 12px);top:13px;width:clamp(70px,18vw,260px);height:1px;background:linear-gradient(90deg,#9de8f3c9,#9de8f366 48%,transparent);box-shadow:0 0 8px #76d9e855;transform-origin:left;animation:mint-signal .55s ease-out both}
+.mint-item.current{opacity:1;animation:mint-arrive .35s cubic-bezier(.2,.65,.3,1) both}
 .terminal-output:not([data-event]) .mint-item.current,.terminal-output[data-event="network"] .mint-item.current{animation:none}
 .mint-command{display:flex;gap:12px;align-items:baseline;color:#b7d2d9}
 .mint-command>span{font-size:.75rem;color:#9bdce5}
@@ -24,7 +23,6 @@
 .mint-effect{display:none;margin:3px 0 0 42px;font-size:.875rem;color:#d9f2f7;line-height:1.5}
 .mint-item.current .mint-effect{display:block}
 @keyframes mint-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-@keyframes mint-signal{from{opacity:0;transform:scaleX(0)}to{opacity:1;transform:scaleX(1)}}
 .shell-hero+.foundation{background:linear-gradient(180deg,#07090c,#09121a);border-top:0}
 @media(min-width:1700px){.shell-hero{--hero-inset:64px}.city-terminal{left:10%;bottom:31%;width:25%}}
 @media(max-width:1100px){.shell-hero{--hero-inset:32px}.city-terminal{left:6%;width:31%;bottom:29%}}
@@ -37,9 +35,8 @@
  .shell-hero:is([data-stage="materializing"],[data-stage="complete"]) h1{top:22%;transform:none;font-size:clamp(1rem,4.45vw,2rem);opacity:.94}
  .city-terminal{top:auto;bottom:13%;left:8%;width:84%;max-width:360px;height:105px}
  .city-terminal::before{left:-8vw;top:-32px;width:calc(100% + 16vw);height:calc(100% + 64px);background:radial-gradient(ellipse 80% 75% at 35% 52%,#29465b33,transparent 72%)}
- .mint-item.current::after{display:none}
  .terminal-output{gap:10px}
  .mint-item:not(:nth-last-child(-n+2)){display:none}
 }
 @media(max-height:700px) and (min-width:761px){.hero.shell-hero{min-height:560px}.city-terminal{top:auto;bottom:13%}.shell-hero h1{top:28%}}
-@media(prefers-reduced-motion:reduce){.mint-item{transition:none;animation:none}.mint-item.current::after{animation:none}.shell-hero h1{transition:none}}
+@media(prefers-reduced-motion:reduce){.mint-item{transition:none;animation:none}.shell-hero h1{transition:none}}
