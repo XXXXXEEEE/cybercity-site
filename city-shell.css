@@ -1,0 +1,36 @@
+/* Atmosphere, live code and the skyline share one borderless canvas. */
+.shell-hero{--hero-inset:48px}
+.hero.shell-hero{height:100vh;height:100svh;min-height:720px;background:#07090c}
+.shell-hero:before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse at 12% 6%,#34363a70,transparent 61%),radial-gradient(ellipse at 45% 48%,#4c315a33,transparent 34%),radial-gradient(ellipse at 74% 78%,#163b422e,transparent 60%)}
+.shell-hero:after{content:'';position:absolute;inset:0;z-index:2;pointer-events:none;opacity:.075;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Cpath fill='%23fff' filter='url(%23n)' opacity='.6' d='M0 0h180v180H0z'/%3E%3C/svg%3E")}
+.shell-hero .hero-art{inset:0;width:100%;height:100%;background:transparent;opacity:.72;filter:saturate(.62);-webkit-mask-image:radial-gradient(ellipse 77% 80% at 78% 70%,#000 12%,#000e 38%,#0006 64%,transparent 91%);mask-image:radial-gradient(ellipse 77% 80% at 78% 70%,#000 12%,#000e 38%,#0006 64%,transparent 91%)}
+.shell-hero .film-poster{opacity:1;object-fit:cover;object-position:58% 100%;transform:none}
+.shell-hero .film-ready .film-poster{visibility:hidden}
+.shell-hero h1{left:8%;right:8%;top:31%;bottom:auto;max-width:none;width:auto;text-align:center;font-size:clamp(1.125rem,4.4vw,4.25rem);font-weight:500;line-height:1.2;letter-spacing:-.035em;white-space:nowrap;text-shadow:0 3px 30px #0306099c;z-index:3}
+.shell-hero h1>span{display:inline}
+.shell-hero h1 .accent{color:#c4e9e7}
+.city-terminal{position:absolute;left:8%;top:auto;bottom:21%;width:32%;max-width:360px;height:190px;z-index:1;border:0;background:none;pointer-events:none}
+.terminal-output{height:100%;display:flex;flex-direction:column;justify-content:flex-end;gap:18px;overflow:hidden;font:400 .8125rem/1.5 var(--mono);letter-spacing:0;contain:layout paint}
+.mint-item{opacity:.2;flex-shrink:0;transition:opacity .55s}
+.mint-item:nth-last-child(2){opacity:.3}
+.mint-item.current{opacity:.7;animation:mint-arrive .55s cubic-bezier(.2,.65,.3,1) both}
+.terminal-output:not([data-event]) .mint-item.current,.terminal-output[data-event="network"] .mint-item.current{animation:none}
+.mint-command{display:flex;gap:12px;align-items:baseline;color:#a3b5bd}
+.mint-command>span{font-size:.75rem;color:#8aa9a6}
+.mint-command strong{font:400 .875rem/1.5 var(--mono);color:#c8d6d8}
+.mint-effect{display:block;margin:3px 0 0 40px;font-size:.75rem;color:#8c9ba4;line-height:1.5}
+@keyframes mint-arrive{from{opacity:0;transform:translateY(5px)}to{opacity:.7;transform:translateY(0)}}
+.shell-hero+.foundation{background:linear-gradient(180deg,#07090c,#09121a);border-top:0}
+@media(min-width:1700px){.shell-hero{--hero-inset:64px}.city-terminal{left:10%;bottom:23%;width:30%}}
+@media(max-width:1100px){.shell-hero{--hero-inset:32px}.city-terminal{left:5%;width:36%;bottom:20%}}
+@media(max-width:760px){
+ .shell-hero{--hero-inset:20px}
+ .hero.shell-hero{height:100vh;height:100svh;min-height:680px}
+ .shell-hero .hero-art{inset:0;width:100%;height:100%;opacity:.76;-webkit-mask-image:radial-gradient(ellipse 120% 69% at 70% 72%,#000 12%,#000c 47%,transparent 88%);mask-image:radial-gradient(ellipse 120% 69% at 70% 72%,#000 12%,#000c 47%,transparent 88%)}
+ .shell-hero h1{top:22%;left:6%;right:6%;font-size:clamp(1rem,4.45vw,2rem)}
+ .city-terminal{top:auto;bottom:13%;left:8%;width:84%;max-width:360px;height:126px}
+ .terminal-output{gap:14px}
+ .mint-item:not(:nth-last-child(-n+2)){display:none}
+}
+@media(max-height:700px) and (min-width:761px){.hero.shell-hero{min-height:560px}.city-terminal{top:auto;bottom:13%}.shell-hero h1{top:28%}}
+@media(prefers-reduced-motion:reduce){.mint-item{transition:none;animation:none}}

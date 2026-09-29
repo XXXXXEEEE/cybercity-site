@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#090c10">
+  <meta name="description" content="A new civilization. Built by you. Create verifiable circuits that connect buildings, transport, energy, and public infrastructure. Explore 160 circuit design challenges in CyberCity.">
+  <meta property="og:title" content="CyberCity · A new civilization. Built by you.">
+  <meta property="og:description" content="From one circuit to an entire city. Build with others and bring tomorrow’s neighborhoods to life.">
+  <title>CyberCity · A new civilization. Built by you.</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23090c10'/%3E%3Cpath d='M23 9H10v14h13M6 13h4m-4 6h4m5-14v4m5-4v4m-5 14v4m5-4v4' fill='none' stroke='%23d3f56a' stroke-width='2.5'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="hero-animation.css">
+  <link rel="stylesheet" href="city-theme.css?v=20260929">
+  <link rel="stylesheet" href="city-shell.css?v=continuous-12">
+  <link rel="stylesheet" href="city-sections.css?v=mint-9">
+  <script src="app.js?v=mint-9" defer></script>
+  <script type="module" src="city-film.js?v=continuous-12"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <a class="brand" href="#" aria-label="CyberCity home"><span class="brand-icon" aria-hidden="true">C<span>+</span></span><span>CYBERCITY</span></a>
+    <a class="film-explore" href="#evolution">Explore the city</a>
+  </header>
+  <main id="main">
+    <section class="hero city-film shell-hero" aria-labelledby="hero-title">
+      <div class="hero-art" id="hero-city" role="group" aria-label="A city grows as components are minted: roads, buildings, transit, and lighting. An illustrative sequence, not live on-chain activity.">
+        <img class="hero-image film-poster" src="assets/cybercity-opening.webp" alt="A living city district, ready to grow into a skyline" width="1672" height="941" fetchpriority="high" decoding="async">
+        <canvas id="hero-city-canvas" aria-hidden="true"></canvas>
+      </div>
+      <h1 id="hero-title">A new civilization. <span class="accent">Built by you.</span></h1>
+      <aside class="city-terminal" aria-labelledby="terminal-title">
+        <h2 id="terminal-title" class="sr-only">City mint sequence</h2>
+        <div class="terminal-output" id="terminal-output" role="log" aria-live="off" aria-label="City mint sequence">
+          <div class="mint-item current"><div class="mint-command"><span>mint</span><strong>Road Grid</strong></div><span class="mint-effect">The first district is connected</span></div>
+        </div>
+      </aside>
+    </section>
+    <section class="foundation section-shell" aria-label="Design system overview">
+      <div><span class="foundation-number">160</span><p>Composable circuit challenges</p></div>
+      <div><span class="foundation-number">03</span><p>From a single light to connected systems</p></div>
+      <div><span class="foundation-number">01</span><p>A shared vision for every builder</p></div>
+      <div class="foundation-note">Every circuit has a purpose.<br> Connect them, and the city takes shape.<span class="mono">DESIGNED TO WORK TOGETHER</span></div>
+    </section>
+    <section id="evolution" class="evolution section-shell" aria-labelledby="evolution-title">
+      <div class="section-heading"><div><span class="eyebrow">01 / WATCH IT COME ALIVE</span><h2 id="evolution-title">Every circuit you create<br> moves the city forward.</h2></div><p>Every component makes something possible.<br> It can open a door safely, power a building,<br> and bring an empty neighborhood to life.</p></div>
+      <div class="growth-console">
+        <div class="growth-visual">
+          <img id="growth-image" src="assets/cyberpunk-foundation-plate.png" alt="Stage one: roads and building sites begin to glow on a rainy night" width="1672" height="941" loading="lazy">
+          <div class="growth-vignette"></div>
+          <div class="growth-topline"><span class="mono">CITY EVOLUTION</span></div>
+          <div class="growth-caption"><span id="growth-number" class="stage-number mono">01</span><div><p id="growth-kicker" class="mono">THE FIRST SPARK</p><h3 id="growth-title">The first light</h3></div></div>
+        </div>
+        <div class="growth-panel">
+          <div class="growth-stage-label"><span class="mono">CHOOSE A CHAPTER</span><span id="growth-index" class="mono">01 / 03</span></div>
+          <div class="stage-buttons" role="group" aria-label="Choose a city building stage">
+            <button class="stage-button active" type="button" data-stage="0" aria-pressed="true"><span>01</span><strong>Foundation</strong><small>Basic circuits</small></button>
+            <button class="stage-button" type="button" data-stage="1" aria-pressed="false"><span>02</span><strong>District</strong><small>Connected devices</small></button>
+            <button class="stage-button" type="button" data-stage="2" aria-pressed="false"><span>03</span><strong>City</strong><small>Working systems</small></button>
+          </div>
+          <div class="stage-story" aria-live="polite" aria-atomic="true"><p id="growth-description">A city starts with simple, reliable decisions. Access rules, clocks, lighting, and start permissions give its first infrastructure a logic of its own.</p><span class="unlocks-label">What this stage makes possible</span><ul id="growth-unlocks"><li>Access with clear rules</li><li>Lighting that responds to people</li><li>Reliable device timing</li></ul></div>
+          <button id="growth-next" class="button lime full" type="button">Grow the neighborhood</button>
+          <p class="panel-footnote">Explore each stage to see what connected components could become.</p>
+        </div>
+      </div>
+    </section>
+    <section id="vision" class="vision section-shell" aria-labelledby="vision-title">
+      <span class="eyebrow">02 / SMALL CIRCUITS. SHARED POSSIBILITIES.</span>
+      <div class="vision-top"><h2 id="vision-title">You light a room.<br> Together, we wake a city.</h2><p>Lighting logic. Elevator interlocks. Energy control.<br> Each small design can connect with others<br> and become part of a larger system.</p></div>
+      <div class="system-tabs" role="group" aria-label="Choose a city system"><button type="button" class="system-tab active" data-system="building" aria-pressed="true">01 · Smart Office</button><button type="button" class="system-tab" data-system="mobility" aria-pressed="false">02 · Air Courier</button><button type="button" class="system-tab" data-system="infrastructure" aria-pressed="false">03 · Smart Water Station</button></div>
+      <div class="assembly-layout">
+        <div class="assembly-inputs" id="assembly-inputs"><div class="assembly-chip"><span class="mono">CC-065</span><strong>Adaptive Lighting</strong><small>Lights respond when people arrive.</small></div><div class="assembly-chip"><span class="mono">CC-066</span><strong>Climate Control</strong><small>Balance heating and cooling requests.</small></div><div class="assembly-chip"><span class="mono">CC-067</span><strong>Fresh Air</strong><small>Bring fresh air into the room.</small></div></div>
+        <div class="assembly-connector" aria-hidden="true"><span></span><span></span><span></span><i>+</i></div>
+        <div class="assembly-result" aria-live="polite"><img class="assembly-image" id="assembly-image" src="assets/adaptive-lighting.webp" alt="Zoned lighting and environmental systems in a smart office" width="1600" height="900" loading="lazy"><div class="assembly-copy"><div class="result-top"><span class="eyebrow">WHEN DESIGNS CONNECT</span><span id="assembly-id" class="mono">CC-127</span></div><h3 id="assembly-title">Smart Office</h3><p id="assembly-description">Lighting, climate, ventilation, and occupancy work together so the building can sense how a space is used and respond.</p><div class="result-bottom"><span id="assembly-tags">Smart spaces / Indoor comfort / Connected systems</span></div></div></div>
+      </div>
+      <p class="assembly-note">Illustrative combinations. Assembly requires compatible ports, encoding, and timing. See the design report for full specifications and tested assembly recipes.</p>
+    </section>
+    <section id="blueprints" class="blueprints section-shell" aria-labelledby="blueprints-title">
+      <div class="section-heading"><div><span class="eyebrow">03 / FIND YOUR PLACE IN THE CITY</span><h2 id="blueprints-title">What will you bring<br> to the city?</h2></div><p>Buildings, transport, energy, and water.<br> Find a design that speaks to you<br> and start with one component.</p></div>
+      <div class="catalog-toolbar"><div class="filter-buttons" role="group" aria-label="Filter circuits by theme"><button class="filter active" type="button" data-filter="all" aria-pressed="true">All themes</button><button class="filter" type="button" data-filter="building" aria-pressed="false">Smart Buildings</button><button class="filter" type="button" data-filter="mobility" aria-pressed="false">Future Mobility</button><button class="filter" type="button" data-filter="infrastructure" aria-pressed="false">Infrastructure</button></div><span class="mono catalog-count" id="catalog-count">06 / 160 DESIGNS</span></div>
+      <div class="circuit-grid" id="circuit-grid"></div>
+      <div class="catalog-bottom"><p>40 simple · 80 intermediate · 40 complex<br> <span>The reference solution is one approach. Your design can take another.</span></p><a class="text-link" href="assets/cybercity-design-report.pdf" download="CyberCity-160-Circuit-Designs.pdf">Design report · PDF (Chinese)<span class="link-line" aria-hidden="true"></span></a></div>
+    </section>
+    <section class="participation section-shell" aria-labelledby="participation-title"><div class="section-heading"><div><span class="eyebrow">04 / FROM YOUR IDEA TO OUR CITY</span><h2 id="participation-title">Every design has a beginning.</h2></div><p>Turn an idea into a verifiable circuit,<br> then connect it to the city.</p></div><div class="steps"><article><span class="step-index mono">01</span><h3>Choose what the city needs</h3><p>Start with the inputs and outputs. Design the logic for a single light, or take on an entire system.</p></article><article><span class="step-index mono">02</span><h3>Design it. Prove it works.</h3><p>Build with NAND and LATCH, pass the required tests, and refine the logic.</p></article><article><span class="step-index mono">03</span><h3>Connect new possibilities</h3><p>Validated components become reusable parts that can combine into devices, buildings, and shared neighborhoods.</p></article></div><p class="protocol-note">The vision includes on-chain verification and design rewards. The project is currently a design and validation prototype; mining and reward contracts are not live.</p></section>
+    <section id="join" class="join section-shell" aria-labelledby="join-title">
+      <div class="join-copy">
+        <img class="access-image" src="assets/access-elevator.webp" alt="A building entrance with smart access and permission controls" width="1600" height="900" loading="lazy">
+        <h2 id="join-title">The city of tomorrow<br> has a place for you.</h2>
+        <p>Start with the first door.<br> Use your logic to decide who gets through.</p>
+        <a class="button lime" href="assets/cybercity-design-report.pdf#page=14" target="_blank" rel="noopener">Read the first challenge</a>
+      </div>
+      <div class="permission-demo">
+        <div class="demo-heading"><span class="mono">CC-001 / Access Key</span></div>
+        <h3>The city’s first door</h3>
+        <div class="demo-fields">
+          <label>Your access level<select id="permission-level"><option value="0">0 · Visitor</option><option value="1">1 · Resident</option><option value="2">2 · Builder</option><option value="3" selected>3 · Administrator</option></select></label>
+          <label>Required access level<select id="permission-required"><option value="0">0 · Visitor or higher</option><option value="1">1 · Resident or higher</option><option value="2" selected>2 · Builder or higher</option><option value="3">3 · Administrator</option></select></label>
+        </div>
+        <label class="auth-control"><span>Identity verified</span><input id="permission-auth" type="checkbox" checked><span class="switch-visual" aria-hidden="true"></span></label>
+        <div class="permission-result" id="permission-result" aria-live="polite"><div class="result-bit mono" id="permission-bit">1</div><div><strong id="permission-title">Access granted</strong><p id="permission-reason">Your identity is verified and your access level meets the requirement.</p></div></div>
+        <div class="demo-rule"><span class="mono">17 NAND / 0 LATCH</span><span>Reference implementation</span></div>
+      </div>
+    </section>
+    <section class="faq section-shell" aria-labelledby="faq-title"><h2 id="faq-title">About the city</h2><div class="faq-list"><details><summary>Can I join without chip design experience?</summary><p>Start with a simple challenge to learn the inputs, outputs, and decision rules, then explore the reference solution. Try Access Key on this page. The full design report includes learning materials.</p></details><details><summary>Does adding components always grow the city?</summary><p>The aim is to expand the city’s capabilities with verified, compatible designs. Copying a component alone does not create progress: facilities also need correct connections, control logic, and execution. The three stages shown here are concept previews, not live construction statistics.</p></details><details><summary>Does “tapeout” here mean making physical chips?</summary><p>At this stage, tapeout means designing, simulating, and verifying digital circuit netlists. It does not imply that physical silicon chips have been manufactured. The city’s buildings and devices are virtual too.</p></details><details><summary>Can I connect a wallet and start mining?</summary><p>Not yet. Specifications, reference netlists, and a local verification engine are complete for all 160 challenges. Challenge registration, on-chain verification, and reward contracts still need development, testing, and auditing. The hero’s mint sequence is illustrative, not actual wallet activity. This page has no wallet connection, minting, or payment features; reward contracts are not live.</p></details></div></section>
+  </main>
+  <footer class="site-footer section-shell"><a class="brand" href="#"><span class="brand-icon" aria-hidden="true">C<span>+</span></span><span>CYBERCITY</span></a><p>Built from logic. Built by us.</p><span>© 2026 CyberCity</span></footer>
+  <div id="live-message" class="sr-only" aria-live="polite"></div>
+  <dialog id="circuit-dialog" aria-labelledby="dialog-title"><button id="dialog-close" class="dialog-close" type="button" aria-label="Close circuit details">×</button><span id="dialog-id" class="eyebrow"></span><h2 id="dialog-title"></h2><p id="dialog-description"></p><div id="dialog-resources" class="dialog-resources"></div><h3>What are the inputs?</h3><p id="dialog-inputs"></p><h3>What can it do for the city?</h3><p id="dialog-purpose"></p><a id="dialog-report" class="button lime" href="assets/cybercity-design-report.pdf" target="_blank" rel="noopener">Read the full challenge</a><p class="dialog-footnote">This is a compiled reference solution. Other implementations may be valid or more efficient.</p></dialog>
+</body>
+</html>
